@@ -28,7 +28,7 @@ if __name__ == "__main__":
         sl['text'] = translate_text(sl['text'], destination_language)
         translines.append(sl)
         pos += 1
-        progress = pos/len(sublines) * 100
+        progress = round(pos/len(sublines) * 100,1)
         print(f"{progress} ", end="", flush=True)
 
     print("done.")

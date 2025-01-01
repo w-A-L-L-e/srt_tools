@@ -9,16 +9,7 @@ def parse_interval(interval_str):
 
 def split_lines(content):
     content = content.replace('\r', '')
-    lines = []
-    lines_before = content.split('\n')
-    print(lines_before)
-    for line in lines_before:
-        if len(line)>0:
-            lines.append(line)
-
-    print(lines)
-    return lines
-
+    return content.split('\n')
 
 def read_srt(srt_file="input.srt"):
     print(f"\nreading {srt_file}... ", end="")
@@ -37,8 +28,16 @@ def read_srt(srt_file="input.srt"):
             lpos += 1
             continue
 
+        # skip empty lines
+        while len(lines[lpos].strip()) == 0 and lpos < len(lines):
+            lpos += 1
+
         sub_interval = lines[lpos].strip()
         lpos += 1
+
+        # skip empty lines
+        while len(lines[lpos].strip()) == 0 and lpos < len(lines):
+            lpos += 1
 
         sub_line = lines[lpos].strip()
         sub_text = ""
@@ -62,26 +61,16 @@ def read_srt(srt_file="input.srt"):
         except ValueError:
             print(f"could not parse interval={sub_interval} sub_nr={sub_nr} sub_text={sub_text}")
 
-
     print("done.")
-    print(items)
     return items
 
 
 
 def delay_time(time_str, delay_minutes=0, delay_seconds=0):
-    # Parse the time string into a datetime object
     time_format = "%H:%M:%S,%f"
     time_obj = datetime.strptime(time_str, time_format)
-    
-    # Create a timedelta for the delay
     delay = timedelta(minutes=delay_minutes, seconds=delay_seconds)
-    
-    # Add the delay to the original time
     new_time_obj = time_obj + delay
-    
-    # Format the new time back to the desired string format
-    # new_time_str = new_time_obj.strftime(time_format)
     new_time = new_time_obj.strftime("%H:%M:%S")
     new_time_ms = f"{new_time_obj.microsecond // 1000:03d}"
 
@@ -99,17 +88,11 @@ def delay_lines(sublines, minutes=0, seconds=0):
 
 
 def time_difference(time_str1, time_str2):
-    # Define the time format
     time_format = "%H:%M:%S,%f"
-    
-    # Parse the time strings into datetime objects
     time_obj1 = datetime.strptime(time_str1, time_format)
     time_obj2 = datetime.strptime(time_str2, time_format)
-    
-    # Calculate the difference
+
     difference = abs((time_obj2 - time_obj1).total_seconds())
-    
-    # Convert the difference to minutes and seconds
     minutes = int(difference // 60)
     seconds = int(difference % 60)
     
@@ -154,4 +137,3 @@ if __name__ == "__main__":
     except ValueError:
         print_usage(sys.argv[0])
         exit(1)
-
