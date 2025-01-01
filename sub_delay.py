@@ -7,17 +7,29 @@ def parse_interval(interval_str):
     start, end = interval_str.strip().split(" --> ")
     return start, end
 
+def split_lines(content):
+    content = content.replace('\r', '')
+    lines = []
+    lines_before = content.split('\n')
+    print(lines_before)
+    for line in lines_before:
+        if len(line)>0:
+            lines.append(line)
+
+    print(lines)
+    return lines
+
 
 def read_srt(srt_file="input.srt"):
     print(f"\nreading {srt_file}... ", end="")
     subfile = open(srt_file, "r", encoding="latin1")
-    lines = subfile.readlines()
+    lines = split_lines(subfile.read())
     lpos = 0
     items = []
 
     while lpos < len(lines):
         try:
-            sub_nr = int(lines[lpos])
+            sub_nr = int(lines[lpos].strip())
             lpos += 1
             if sub_nr < 1:
                 continue
@@ -36,17 +48,23 @@ def read_srt(srt_file="input.srt"):
             if lpos < len(lines):
                 sub_line = lines[lpos].strip()
 
-        start_time, end_time = parse_interval(sub_interval)
-        item = {
-            'nr': sub_nr,
-            'start_time': start_time,
-            'end_time': end_time,
-            'text': sub_text.strip()
-        }
+        try:
+            start_time, end_time = parse_interval(sub_interval)
 
-        items.append(item)
+            item = {
+                'nr': sub_nr,
+                'start_time': start_time,
+                'end_time': end_time,
+                'text': sub_text.strip()
+            }
+
+            items.append(item)
+        except ValueError:
+            print(f"could not parse interval={sub_interval} sub_nr={sub_nr} sub_text={sub_text}")
+
 
     print("done.")
+    print(items)
     return items
 
 
