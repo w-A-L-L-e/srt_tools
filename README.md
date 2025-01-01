@@ -1,4 +1,4 @@
-## USAGE
+## Delay script example
 
 Given an srt input file:
 
@@ -42,4 +42,22 @@ U heeft me te pakken.
 00:13:30,580 --> 00:13:34,292
 Als we geen glimlach op uw gezicht kunnen
 krijgen dan is uw huid te strak.
+```
+
+## Translations install dependencies
+
+```
+ python -m venv python_env
+ source python_env/bin/activate
+ pip install -r requirements.txt
+```
+
+## Example usage
+
+```
+python sub_translate.py fr in.srt french.srt
+
+reading in.srt... done.
+translating texts... 50.0% 100.0% done.
+writing french.srt... done.
 ```
