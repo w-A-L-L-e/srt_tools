@@ -20,7 +20,7 @@ if __name__ == "__main__":
     destination_language = sys.argv[1]  # example: 'en'
     sublines = read_srt(sys.argv[2])
 
-    print("translating texts... ", end="", flush=True)
+    print("translating text:", end="\n", flush=True)
     translines = []
 
     pos = 0
@@ -29,7 +29,9 @@ if __name__ == "__main__":
         translines.append(sl)
         pos += 1
         progress = round(pos/len(sublines) * 100,1)
-        print(f"{progress} ", end="", flush=True)
+
+        print("\033[F\033[K", end="", flush=True)  # Move up and clear the line
+        print(f"{progress} ")
 
     print("done.")
 
